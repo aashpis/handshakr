@@ -3,23 +3,22 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 ``
 export default function LoginForm() {
+  const router = useRouter();
   const testUsername = "foo"
   const testPassword = "bar"
-  const [username, setUserName] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  // const [username, setUserName] = React.useState('')
+  // const [password, setPassword] = React.useState('')
   const [validLogin, setValidLogin] = React.useState(true)
 
   const handleSumbit = (e) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    setUserName(prev => formData.get("username"))
-    setPassword(prev => formData.get("password"))
-    // const username = formData.get("username")
-    // const password = formData.get("password")
+    const username = formData.get("username")
+    const password = formData.get("password")
 
     const loginInfo = {
       username,
@@ -32,14 +31,7 @@ export default function LoginForm() {
       setValidLogin(prev => !prev)
     }
 
-
   }
-
-
-
-
-
-
 
 
   return (
@@ -87,7 +79,7 @@ export default function LoginForm() {
               type="password"
               placeholder="password"
               required
-              minLength={6}
+              minLength={1} //TODO: update this for proper password
             />
           </div>
           {!validLogin && (
