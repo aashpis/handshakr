@@ -40,11 +40,13 @@ export async function signup(state: FormState, formData: FormData) {
     }
   }
 
-  // TODO:
+  // Current steps:
   // 4. Create user session
+  await createSession(user.id)
   // 5. Redirect user
+  redirect('/profile') //TODO: replace placeholder route
 }
-}
+
 
 
 
