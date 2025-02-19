@@ -1,6 +1,7 @@
 // functions related to user authentication are here
 
-import { SignupFormSchema, FormState } from '@/app/lib/definitions'
+import { SignupFormSchema, FormState } from './definitions'
+import { createSession } from './session'
 
 export async function signup(state: FormState, formData: FormData) {
   // Validate form fields
