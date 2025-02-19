@@ -55,6 +55,7 @@ export async function createSession(userId: string) {
   })
 }
 
+
 export async function updateSession() {
   const session = (await cookies()).get('session')?.value
   const payload = await decrypt(session)
@@ -63,6 +64,7 @@ export async function updateSession() {
     return null
   }
  
+  // TODO set proper cookie expiration
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
  
   const cookieStore = await cookies()
