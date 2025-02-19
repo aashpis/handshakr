@@ -44,7 +44,7 @@ export async function signup(state: FormState, formData: FormData) {
   // 4. Create user session
   // 5. Redirect user
 }
-}
+
 
 
 
