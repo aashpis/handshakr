@@ -20,10 +20,25 @@ export async function signup(state: FormState, formData: FormData) {
 
   //Prepare data for insertion into database
   const { name, email, password } = validatedFields.data
-  // e.g. Hash the user's password before storing it
+  // Hash the user's password before storing it
   const hashedPassword = await bcrypt.hash(password, 10)
 
   // 3. Insert the user into the database or call an Auth Library's API
+  
+  const requestOptions = {
+    method: 'POST',
+    headers: { 
+        'Content-Type': '',
+        'Authorization': 'Bearer my-token',
+    },
+    body: JSON.stringify({ 
+      title: 'React POST Request Example' 
+    
+    })
+};
+
+
+  //place holder code ****
   const data = await db
     .insert(users)
     .values({
@@ -40,12 +55,13 @@ export async function signup(state: FormState, formData: FormData) {
       message: 'An error occurred while creating your account.',
     }
   }
+  // **********
 
   // Current steps:
   // 4. Create user session
   await createSession(user.id)
   // 5. Redirect user
-  redirect('/profile') //TODO: replace placeholder route
+  redirect('/dashboard') //TODO: replace placeholder route
 }
 
 
