@@ -1,4 +1,4 @@
-//FOR TESTING use SignupForm instead
+// *********************** FOR TESTING use SignupForm instead *****************************
 
 'use client'
 
@@ -91,7 +91,7 @@ export default function RegistrationForm() {
               type="password"
               placeholder="password"
               required
-              minLength={6}
+              minLength={1}
             />
           </div>
           <div className="mb-6">
