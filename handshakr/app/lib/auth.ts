@@ -40,13 +40,14 @@ export async function signup(state: FormState, formData: FormData) {
     method: 'POST',
     headers: { 
         'Content-Type': '',
-        'Authorization': 'Bearer my-token',
+        'Authorization': 'application/json' // TODO: add authorization
     },
     body: JSON.stringify({ 
       title: 'React POST Request Example' 
     
     })
 };
+
 
 
   //place holder code ****
