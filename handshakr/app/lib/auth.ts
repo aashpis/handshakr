@@ -18,6 +18,17 @@ export async function signup(state: FormState, formData: FormData) {
     }
   }
 
+  
+  // TODO: check if an account exists for email
+  // show error message if true
+  const userAlreadyExist = (email:string) => {
+    //if !checkEmailForAccount
+      // return false 
+  // return true
+  }
+
+
+
   //Prepare data for insertion into database
   const { name, email, password } = validatedFields.data
   // Hash the user's password before storing it
