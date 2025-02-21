@@ -1,8 +1,9 @@
 // auth.ts
 import bcrypt from "bcryptjs"
-import { SignupFormSchema, FormState } from './definitions'
+import { SignupFormSchema, FormState, UserAuthResponse, ApiResult } from './definitions'
 import { createSession, deleteSession } from './session'
 import { redirect } from 'next/navigation'
+
 
 // API endpoints
 const API_ENDPOINTS = {
@@ -12,24 +13,7 @@ const API_ENDPOINTS = {
   checkEmail: '/api/check-email-for-account'
 }
 
-// Types
-export type AuthResponse = {
-  token: string
-  user: {
-    id: string
-    name: string
-    email: string
-    role?: string
-  }
-}
 
-type ApiResult<T> = {
-  success: true
-  data: T
-} | {
-  success: false
-  error: string
-}
 
 // API functions
 async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
@@ -60,12 +44,13 @@ async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>
     }
   }
 }
-
+// adds new user data to backend 
+// 
 async function registerNewUser(data: {
   name: string,
   email: string,
   password: string
-}): Promise<ApiResult<AuthResponse>> {
+}): Promise<ApiResult<UserAuthResponse>> { // type def. in definitions.tsx
   try {
     const response = await fetch(API_ENDPOINTS.signup, {
       method: 'POST',
@@ -96,8 +81,14 @@ async function registerNewUser(data: {
   }
 }
 
-// Main signup function
-export async function signup(state: FormState, formData: FormData) {
+// Main Sign Up function
+// Validates User Data
+// Checks if Email is available
+// Hashes password before storing
+// POST data to back end
+// Create Session
+// redirect to user dashboard
+export async function signUp(state: FormState, formData: FormData) {
   // 1. Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
@@ -129,10 +120,10 @@ export async function signup(state: FormState, formData: FormData) {
     }
   }
 
-  // 3. Hash password
+  // 3. Hash password, 10 rounds of salt
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  // 4. Register new user
+  // 4. Register new user, get new user data from backend
   const result = await registerNewUser({
     name,
     email,
@@ -145,7 +136,7 @@ export async function signup(state: FormState, formData: FormData) {
     }
   }
 
-  // 5. Create session
+  // 5. Create session. Get user id to create a session
   await createSession(result.data.user.id)
 
   // 6. Redirect to dashboard

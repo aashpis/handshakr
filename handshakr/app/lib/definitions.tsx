@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-// valid data from sign up.
+// validate data from sign up.
 export const SignupFormSchema = z.object({
   name: z
     .string()
@@ -19,6 +19,7 @@ export const SignupFormSchema = z.object({
 })
 
 //TODO: decide if login with username or just email
+// Validates login info
 export const LoginFormSchema = z.object({
   name: z
     .string()
@@ -27,7 +28,8 @@ export const LoginFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
   password: z.string({message: "Password must be characters only"})
 })
- 
+
+// collects error messages from login/signup validation
 export type FormState =
   | {
       errors?: {
@@ -39,16 +41,15 @@ export type FormState =
     }
   | undefined
   
-  // The payload should contain the minimum, unique user data that'll 
-  // be used in subsequent requests, such as the user's ID, role, etc. 
-  // It should not contain personally identifiable information like phone number, email address, credit card information, etc, or sensitive data like passwords.
-
+  //TODO: what goes in the payload?
+  //SessionPayload for auth
   export type SessionPayload = {
     userID: 'id',
     role: 'role',
     token: 'token'    
   }
 
+  // stores results from API calls. 
   export type ApiResult<T> = {
     success: true
     data: T
@@ -57,7 +58,8 @@ export type FormState =
     error: string
   }
 
-  export type AuthResponse = {
+  // What data is returned from backend? 
+  export type UserAuthResponse = {
     token: string //JWT 
     user: {
       id: string
