@@ -15,7 +15,7 @@ const API_ENDPOINTS = {
 
 
 
-// API functions
+// check if email is available to use for signup
 async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
   try {
     const response = await fetch(`${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`, {
@@ -144,6 +144,7 @@ export async function signUp(state: FormState, formData: FormData) {
 }
 
 // Signout function
+// TODO: does anything need to be sent to the backend or is deleting the session enough?
 export async function signout() {
   try {
     await fetch(API_ENDPOINTS.signout, {
