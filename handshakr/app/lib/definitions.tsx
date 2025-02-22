@@ -44,7 +44,7 @@ export type FormState =
   //TODO: what goes in the payload?
   //SessionPayload for auth
   export type SessionPayload = {
-    userID: 'id',
+    userId: 'id',
     role: 'role',
     token: 'token'    
   }
