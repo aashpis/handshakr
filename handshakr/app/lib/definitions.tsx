@@ -1,5 +1,16 @@
 import { z } from 'zod'
 
+// API endpoints
+export const API_ENDPOINTS = {
+  signup: '/api/signup',
+  signin: '/api/signin',
+  signout: '/api/signout',
+  checkEmail: '/api/check-email-for-account',
+  userProfile: '/api/user-profile',
+  createHandshake: '/api/create-handshake',
+  refreshToken: '/api/refresh-token',
+}
+
 // validate data from sign up.
 export const SignupFormSchema = z.object({
   name: z
@@ -18,15 +29,9 @@ export const SignupFormSchema = z.object({
     .trim(),
 })
 
-//TODO: decide if login with username or just email
-// Validates login info
 export const LoginFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
-    .trim(),
   email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
-  password: z.string({message: "Password must be characters only"})
+  password: z.string({ message: "Password is required" })
 })
 
 // collects error messages from login/signup validation
@@ -41,50 +46,45 @@ export type FormState =
     }
   | undefined
   
-  //TODO: what goes in the payload?
-  //SessionPayload for auth
-  export type SessionPayload = {
-    userId: 'id',
-    role: 'role',
-    token: 'token',    
+// SessionPayload for JWT
+export type SessionPayload = {
+  userId: string
+  token: string
+  expiresAt: string
+  [key: string]: any // For any additional claims
+}
+
+// stores results from API calls. 
+export type ApiResult<T> = {
+  success: true
+  data: T
+} | {
+  success: false
+  error: string
+}
+
+// What data is returned from backend auth endpoints
+export type UserAuthResponse = {
+  token: string // JWT 
+  user: {
+    id: string
+    name: string
+    email: string
+    role?: string
   }
+}
 
-  // stores results from API calls. 
-  export type ApiResult<T> = {
-    success: true
-    data: T
-  } | {
-    success: false
-    error: string
-  }
-
-  // What data is returned from backend? 
-  export type UserAuthResponse = {
-    token: string //JWT 
-    user: {
-      id: string
-      name: string
-      email: string
-      role?: string
-    }
-  }
-
-
-
-  // validate data from sign up.
 export const HandshakeFormSchema = z.object({
-  name: z
+  title: z
     .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .min(2, { message: 'Title must be at least 2 characters long.' })
     .trim(),
-  email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
-  password: z
+  description: z
     .string()
-    .min(8, { message: 'Be at least 8 characters long' })
-    .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
-    .regex(/[0-9]/, { message: 'Contain at least one number.' })
-    .regex(/[^a-zA-Z0-9]/, {
-      message: 'Contain at least one special character.',
-    })
+    .min(10, { message: 'Description must be at least 10 characters long.' })
+    .trim(),
+  agreerEmail: z
+    .string()
+    .email({ message: 'Please enter a valid email.' })
     .trim(),
 })
