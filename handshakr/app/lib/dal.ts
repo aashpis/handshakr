@@ -23,12 +23,38 @@ export const verifySession = cache(async () => {
 })
 
 // get user profile data
-export function getUser(){
 
-    const session = await verifySession()
-    if (!session) return null
+import {API_ENDPOINTS, ApiResult,   } from './definitions'
 
-}
+  // check if email is available to use for signup
+async function getUserProfile(): Promise<ApiResult<boolean>> {
+    try {
+      const response = await fetch(API_ENDPOINTS.userProfile, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+  
+      if (!response.ok) {
+        return {
+          success: false,
+          error: 'Failed to get user profile data'
+        }
+      }
+  
+      const authResponse = await response.json();
+      return {
+        success: true,
+        data: authResponse
+      };
+    } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'An unexpected error occurred'
+        };
+      }
+  }
 
 // edit user profile data
 export function editUser(){
