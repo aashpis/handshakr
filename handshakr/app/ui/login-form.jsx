@@ -100,10 +100,13 @@ export default function LoginForm() {
             >
               Sign In
             </button>
-
+          </div>
+          <div className="flex items-center justify-center mt-5  bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600">
+            <Link href='/signup'> Create New Account </Link>
           </div>
         </form>
       </div>
+
     </div>
   );
 };
