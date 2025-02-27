@@ -1,5 +1,4 @@
-import RegistrationForm from '../ui/registration-form'
-import SignupForm from '@/signupform'
+import SignupForm from '../ui/signup-form'
 
 export default function Page() {
   return (
