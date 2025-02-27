@@ -1,8 +1,9 @@
+
+'use server'
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { SessionPayload } from './definitions'
 import { cookies } from 'next/headers'
-
 
 
 const secretKey = process.env.SESSION_SECRET
@@ -28,18 +29,7 @@ export async function decrypt(session: string | undefined = '') {
 }
 
 /*
-
-To store the session in a cookie, use the Next.js cookies API. The cookie should be set on the server, and include the recommended options:
-
-    HttpOnly: Prevents client-side JavaScript from accessing the cookie.
-    Secure: Use https to send the cookie.
-    SameSite: Specify whether the cookie can be sent with cross-site requests.
-    Max-Age or Expires: Delete the cookie after a certain period.
-    Path: Define the URL path for the cookie.
-
-Please refer to MDN
-for more information on each of these options.
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+creates and stores the session in a cookie
 */
 export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -54,6 +44,20 @@ export async function createSession(userId: string) {
     path: '/',
   })
 }
+// OLD FUNCTION
+// export async function createSession(userId: string) {
+//   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+//   const session = await encrypt({ userId, expiresAt })
+//   const cookieStore = await cookies()
+ 
+//   cookieStore.set('session', session, {
+//     httpOnly: true,
+//     secure: true,
+//     expires: expiresAt,
+//     sameSite: 'lax',
+//     path: '/',
+//   })
+// }
 
 
 export async function updateSession() {
