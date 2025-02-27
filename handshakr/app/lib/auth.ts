@@ -1,17 +1,17 @@
 // auth.ts
 import bcrypt from "bcryptjs"
-import { SignupFormSchema, FormState, UserAuthResponse, ApiResult } from './definitions'
+import { SignupFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS } from './definitions'
 import { createSession, deleteSession } from './session'
 import { redirect } from 'next/navigation'
 
 
-// API endpoints
-const API_ENDPOINTS = {
-  signup: '/api/signup',
-  signin: '/api/signin',
-  signout: '/api/signout',
-  checkEmail: '/api/check-email-for-account'
-}
+// // API endpoints
+// const API_ENDPOINTS = {
+//   signup: '/api/signup',
+//   signin: '/api/signin',
+//   signout: '/api/signout',
+//   checkEmail: '/api/check-email-for-account'
+// }
 
 
 
@@ -46,7 +46,7 @@ async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>
 }
 // adds new user data to backend 
 // 
-async function registerNewUser(data: {
+async function postNewUserData(data: {
   name: string,
   email: string,
   password: string
@@ -89,7 +89,7 @@ async function registerNewUser(data: {
 // Create Session
 // redirect to user dashboard
 export async function signUp(state: FormState, formData: FormData) {
-  // 1. Validate form fields
+  //Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -104,7 +104,7 @@ export async function signUp(state: FormState, formData: FormData) {
 
   const { name, email, password } = validatedFields.data
 
-  // 2. Check email availability
+  // Check email availability
   const emailCheck = await checkEmailAvailability(email)
   if (!emailCheck.success) {
     return {
@@ -120,14 +120,12 @@ export async function signUp(state: FormState, formData: FormData) {
     }
   }
 
-  // 3. Hash password, 10 rounds of salt
-  const hashedPassword = await bcrypt.hash(password, 10)
 
-  // 4. Register new user, get new user data from backend
-  const result = await registerNewUser({
+  // 3. Register new user, get new user data from backend
+  const result = await postNewUserData({
     name,
     email,
-    password: hashedPassword
+    password
   })
 
   if (!result.success) {
