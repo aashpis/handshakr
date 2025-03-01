@@ -1,6 +1,6 @@
 'use client'
  
-import { createHandshake, connectAgreer } from 'dal'
+import { createHandshake, connectAgreer } from '../lib/dal'
 import { useActionState } from 'react'
  
 export default function HandshakeCreationForm() {
