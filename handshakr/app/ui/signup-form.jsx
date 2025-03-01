@@ -1,42 +1,72 @@
 'use client'
- 
+
 import { signUp } from '../lib/auth'
 import { useActionState } from 'react'
- 
+
 export default function SignupForm() {
   const [state, action, pending] = useActionState(signUp, undefined)
- 
+
   return (
-    <form action={action}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input id="name" name="name" placeholder="Name" />
-      </div>
-      {state?.errors?.name && <p>{state.errors.name}</p>}
- 
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" placeholder="Email" />
-      </div>
-      {state?.errors?.email && <p>{state.errors.email}</p>}
- 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" />
-      </div>
-      {state?.errors?.password && (
-        <div>
-          <p>Password must:</p>
-          <ul>
-            {state.errors.password.map((error) => (
-              <li key={error}>- {error}</li>
-            ))}
-          </ul>
+    <div className="flex items-center justify-center min-h-screen bg-blue-100">
+      <form
+        action={action}
+        className="bg-white px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="name">
+            Name
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name" 
+            name="name"
+            placeholder="Name" 
+            />
         </div>
-      )}
-      <button disabled={pending} type="submit">
-        Sign Up
-      </button>
-    </form>
+        {state?.errors?.name && <p className='text-red-500 mb-4'>{state.errors.name}</p>}
+
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email">
+            Email
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email" 
+            name="email" 
+            placeholder="Email" />
+        </div>
+        {state?.errors?.email && <p className='text-red-500 mb-4'>{state.errors.email}</p>}
+
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Password
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="password" name="password" type="password" />
+        </div>
+        {state?.errors?.password && (
+          <div>
+            <p className='text-red-500'>Password must:</p>
+            <ul className = "text-sm mb-4">
+              {state.errors.password.map((error) => (
+                <li key={error}>- {error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          disabled={pending}
+          type="submit">
+          Sign Up
+        </button>
+      </form>
+    </div>
   )
 }
