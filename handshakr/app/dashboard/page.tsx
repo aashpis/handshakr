@@ -1,9 +1,24 @@
 import { verifySession } from './app/lib/dal'
+import  ProfileCard  from '../ui/profile-card'
+import HandshakeCreationForm from '../ui/handshake-creation-form'
 
-
+const user = {
+  username: "jSmith",
+  userID: "123456",
+  email: "jsmith@gmail.com"
+}
 
 export default function Page() {
-    return <p>My profile page</p>;
+    return (
+      <div>
+    <ProfileCard 
+    username = {user.username}
+    userId = {user.userID}
+    email = {user.email}
+    />
+    <HandshakeCreationForm />
+    </div>
+    );
   }
  
 
