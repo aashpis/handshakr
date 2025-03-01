@@ -1,13 +1,13 @@
 // Data Access layer 
 // Verifies Auth of requests from client isde
+'use server' 
 
 import 'server-only'
- 
 import { cookies } from 'next/headers'
 import { decrypt } from './session'
 import { cache} from 'react'
 import { redirect } from 'next/navigation'
- 
+
 
 // if verified: stores isAuth and userId in cache
 // else: redirect to home page
@@ -27,7 +27,7 @@ export const verifySession = cache(async () => {
 import {API_ENDPOINTS, ApiResult,   } from './definitions'
 
   // check if email is available to use for signup
-async function getUserProfile(): Promise<ApiResult<boolean>> {
+export async function getUserProfile(): Promise<ApiResult<boolean>> {
     try {
       const response = await fetch(API_ENDPOINTS.userProfile, {
         method: 'GET',
@@ -57,36 +57,39 @@ async function getUserProfile(): Promise<ApiResult<boolean>> {
   }
 
 // edit user profile data
-export function editUser(){
+export async function editUser(){
 
 }
 
 // show which handshakes have not been completed
-export function getPendingHandshakes(){
+export async function getPendingHandshakes(){
 
 }
 
 
 // get encrypted handshake history data
 // each handshake must be decrypted by user to view
-export function getHandshakeHistory(){
+export async function getHandshakeHistory(){
 
 }
 
 // decrypt a past handshake
-export function decryptHandshake(){
+export async function decryptHandshake(){
 
 }
 
-export function createHandshake(){
+export async function createHandshake(){
+  console.log("handhshake created")
+  return true
 
 }
 
 // connect agreerer to new handshake
-export function connectAgreer(){
+export async function connectAgreer(){
+  return true
 
 }
 
-export function acceptHandshake(){
+export async function acceptHandshake(){async 
 
 }
