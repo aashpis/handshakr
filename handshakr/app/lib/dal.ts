@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 import { decrypt } from './session'
 import { cache} from 'react'
 import { redirect } from 'next/navigation'
-
+import {API_ENDPOINTS, ApiResult} from './definitions'
 
 // if verified: stores isAuth and userId in cache
 // else: redirect to home page
@@ -24,7 +24,7 @@ export const verifySession = cache(async () => {
 
 // get user profile data
 
-import {API_ENDPOINTS, ApiResult,   } from './definitions'
+
 
   // check if email is available to use for signup
 export async function getUserProfile(): Promise<ApiResult<boolean>> {
@@ -78,6 +78,7 @@ export async function decryptHandshake(){
 
 }
 
+// creates a handshake 
 export async function createHandshake(){
   console.log("handhshake created")
   return true
@@ -90,6 +91,6 @@ export async function connectAgreer(){
 
 }
 
-export async function acceptHandshake(){async 
+export async function acceptHandshake(){
 
 }
