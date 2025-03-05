@@ -1,19 +1,31 @@
+/**
+ * Contains all custom defined types 
+ * 
+ */
+
+
 import { z } from 'zod'
 
 // API endpoints
 export const API_ENDPOINTS = {
-  signup: '/api/signup',
-  signin: '/api/signin',
-  signout: '/api/signout',
-  checkEmail: '/api/check-email-for-account',
-  userProfile: '/api/user-profile',
-  createHandshake: '/api/create-handshake',
-  refreshToken: '/api/refresh-token',
+  register: 'http://localhost:8080/handshakr/auth/register',
+  login: 'http://localhost:8080/handshakr/auth/login', //TODO: change sign in to login
+  signout: '/handshakr/auth/signout',
+  checkEmail: '/handshakr/auth/check-email-for-account',
+  userProfile: '/handshakr/auth/user-profile',
+  createHandshake: '/handshakr/auth/create-handshake',
+  refreshToken: '/handshakr/auth/refresh-token',
 }
 
-// validate data from sign up.
-export const SignupFormSchema = z.object({
-  name: z
+/**********  SCHEMA DEFINTIONS  *******************
+ * Schema are zod objects that validates user input into forms
+ * Schema only validate inputs based on specifications and does NOT authenticate data 
+*/
+
+// validate user registration-form input 
+// returns error messages to be displayed in form
+export const UserRegisterFormSchema = z.object({
+  username: z
     .string()
     .min(2, { message: 'Name must be at least 2 characters long.' })
     .trim(),
@@ -29,51 +41,18 @@ export const SignupFormSchema = z.object({
     .trim(),
 })
 
+// validate login-form input 
+// returns error messages to be displayed in form
 export const LoginFormSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+  username: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .trim(),
   password: z.string({ message: "Password is required" })
 })
 
-// collects error messages from login/signup validation
-export type FormState =
-  | {
-      errors?: {
-        name?: string[]
-        email?: string[]
-        password?: string[]
-      }
-      message?: string
-    }
-  | undefined
-  
-// SessionPayload for JWT
-export type SessionPayload = {
-  userId: string
-  token: string
-  expiresAt: string
-  [key: string]: any // For any additional claims
-}
-
-// stores results from API calls. 
-export type ApiResult<T> = {
-  success: true
-  data: T
-} | {
-  success: false
-  error: string
-}
-
-// What data is returned from backend auth endpoints
-export type UserAuthResponse = {
-  token: string // JWT 
-  user: {
-    id: string
-    name: string
-    email: string
-    role?: string
-  }
-}
-
+// validate handshake-creation-form input
+// returns error messages to be displayed in form
 export const HandshakeFormSchema = z.object({
   title: z
     .string()
@@ -88,3 +67,64 @@ export const HandshakeFormSchema = z.object({
     .email({ message: 'Please enter a valid email.' })
     .trim(),
 })
+
+/********** TYPE DEFINTIONS  *******************
+* custom type defintions  
+*/
+
+// collects error messages to be displayed
+// if no errors messages, it is set as undefined 
+export type FormState =
+  | {
+      errors?: {
+        name?: string[]
+        email?: string[]
+        password?: string[]
+      }
+      message?: string
+    }
+  | undefined
+  
+// SessionPayload for JWT
+// TODO: define contents of payload 
+export type SessionPayload = {
+  userId: string
+  token: string
+  expiresAt: string
+  [key: string]: any // For any additional claims
+}
+
+//payload for login auth
+export type LoginPayload = {
+  username: string
+  password: string
+}
+
+//payload for register auth
+export type RegisterPayload ={
+  username: string
+  password: string
+  email: string
+}
+
+// stores results from API calls. 
+export type ApiResult<T> = {
+  success: true
+  data: T
+} | {
+  success: false
+  error: string
+}
+
+// Contains User Authentication Response data
+// TODO: define data is returned from backend auth endpoints
+export type UserAuthResponse = {
+  token: string // JWT 
+  user: {
+    id: string
+    name: string
+    email: string
+    role?: string
+  }
+}
+
