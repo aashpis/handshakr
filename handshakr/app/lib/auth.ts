@@ -1,18 +1,6 @@
-// auth.ts
-import bcrypt from "bcryptjs"
-import { SignupFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS } from './definitions'
+import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS } from './definitions'
 import { createSession, deleteSession } from './session'
 import { redirect } from 'next/navigation'
-
-
-// // API endpoints
-// const API_ENDPOINTS = {
-//   signup: '/api/signup',
-//   signin: '/api/signin',
-//   signout: '/api/signout',
-//   checkEmail: '/api/check-email-for-account'
-// }
-
 
 
 // check if email is available to use for signup
@@ -44,17 +32,17 @@ async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>
     }
   }
 }
+
 // adds new user data to backend 
-// 
-async function postNewUserData(data: {
-  name: string,
-  email: string,
-  password: string
+async function createUser(data: {
+  username: string,
+  password: string,
+  email: string
 }): Promise<ApiResult<UserAuthResponse>> { // type def. in definitions.tsx
   try {
-    const response = await fetch(API_ENDPOINTS.signup, {
+    const response = await fetch(API_ENDPOINTS.register, {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -81,6 +69,42 @@ async function postNewUserData(data: {
   }
 }
 
+// auth user data for login
+async function authUser(data: {
+  username: string,
+  password: string
+}): Promise<ApiResult<UserAuthResponse>> { // type def. in definitions.tsx
+  try {
+    const response = await fetch(API_ENDPOINTS.login, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return {
+        success: false,
+        error: error.message || 'Failed to login'
+      };
+    }
+
+    const authResponse = await response.json();
+    return {
+      success: true,
+      data: authResponse
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'An unexpected error occurred'
+    };
+  }
+
+}
+
 // Main Sign Up function
 // Validates User Data
 // Checks if Email is available
@@ -88,10 +112,10 @@ async function postNewUserData(data: {
 // POST data to back end
 // Create Session
 // redirect to user dashboard
-export async function signUp(state: FormState, formData: FormData) {
+export async function registerUser(state: FormState, formData: FormData) {
   //Validate form fields
-  const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get('name'),
+  const validatedFields = UserRegisterFormSchema.safeParse({
+    username: formData.get('username'),
     email: formData.get('email'),
     password: formData.get('password'),
   })
@@ -102,28 +126,28 @@ export async function signUp(state: FormState, formData: FormData) {
     }
   }
 
-  const { name, email, password } = validatedFields.data
+  const { username, email, password } = validatedFields.data
 
-  // Check email availability
-  const emailCheck = await checkEmailAvailability(email)
-  if (!emailCheck.success) {
-    return {
-      message: emailCheck.error
-    }
-  }
+  // // Check email availability - need endpoint
+  // const emailCheck = await checkEmailAvailability(email)
+  // if (!emailCheck.success) {
+  //   return {
+  //     message: emailCheck.error
+  //   }
+  // }
 
-  if (!emailCheck.data) {
-    return {
-      errors: {
-        email: ['An account with this email already exists']
-      }
-    }
-  }
+  // if (!emailCheck.data) {
+  //   return {
+  //     errors: {
+  //       email: ['An account with this email already exists']
+  //     }
+  //   }
+  // }
 
 
   // 3. Register new user, get new user data from backend
-  const result = await postNewUserData({
-    name,
+  const result = await createUser({
+    username,
     email,
     password
   })
@@ -133,12 +157,57 @@ export async function signUp(state: FormState, formData: FormData) {
       message: result.error
     }
   }
+  // TESTING ONLY:
+  console.log("User sucessfully created")
 
-  // 5. Create session. Get user id to create a session
-  await createSession(result.data.user.id)
+  // // 5. Create session. Get user id to create a session
+  // await createSession(result.data.user.id)
 
   // 6. Redirect to dashboard
   redirect('/dashboard')
+}
+
+
+export async function login(state: FormState, formData: FormData) {
+  //Validate form fields
+  const validatedFields = UserRegisterFormSchema.safeParse({
+    username: formData.get('username'),
+    password: formData.get('password'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const { username, password } = validatedFields.data
+
+  // 3. Register new user, get new user data from backend
+  const result = await authUser({
+    username,
+    password
+  })
+
+  if (!result.success) {
+    return {
+      message: result.error
+    }
+  }
+  // TESTING ONLY:
+  console.log("User sucessfully created")
+
+  // // 5. Create session. Get user id to create a session
+  // await createSession(result.data.user.id)
+
+  // 6. Redirect to dashboard
+  redirect('/dashboard')
+}
+  
+
+
+
+  
 }
 
 // Signout function
