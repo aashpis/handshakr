@@ -1,39 +1,15 @@
-// ***** TEST LOGIN FORM FOR DEMO ***** 
-
 'use client'
 
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link'
+import { useActionState } from 'react'
 import { useRouter } from 'next/navigation';
+import { login } from '../lib/auth'
 
 ``
 export default function LoginForm() {
   const router = useRouter();
-  const testUsername = "foo"
-  const testPassword = "bar"
-  // const [username, setUserName] = React.useState('')
-  // const [password, setPassword] = React.useState('')
-  const [validLogin, setValidLogin] = React.useState(true)
-
-  const handleSumbit = (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const username = formData.get("username")
-    const password = formData.get("password")
-
-    const loginInfo = {
-      username,
-      password
-    }
-    console.log(loginInfo)
-    if (username === testUsername && password === testPassword) {
-      router.push('/dashboard');
-    } else {
-      setValidLogin(prev => !prev)
-    }
-
-  }
+  const [state, action, pending] = useActionState(login, undefined)
 
 
   return (
@@ -50,7 +26,11 @@ export default function LoginForm() {
             className="w-full"
           />
         </div>
-        <form className="bg-white px-8 pt-6 pb-8 mb-4" onSubmit={handleSumbit}>
+        <form 
+          onSubmit={action}
+          className="bg-white px-8 pt-6 pb-8 mb-4" 
+          >
+          
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -67,11 +47,13 @@ export default function LoginForm() {
               required
             />
           </div>
+          {state?.errors?.username && <p className='text-red-500 mb-4'>{state.errors.username}</p>}
+
           <div className="mb-6">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="password"
-            >
+              >
               Password
             </label>
             <input
@@ -80,13 +62,10 @@ export default function LoginForm() {
               name="password"
               type="password"
               placeholder="password"
-              required
-              minLength={1} //TODO: update this for proper password
-            />
+              />
           </div>
-          {!validLogin && (
-            <p className='text-red-500 mb-4'>Login not valid!</p>
-          )}
+          {state?.errors?.password && <p className='text-red-500 mb-4'>{state.errors.password}</p>}
+
           <div className="flex items-center justify-between">
             <Link
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
