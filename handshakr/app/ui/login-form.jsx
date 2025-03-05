@@ -102,7 +102,9 @@ export default function LoginForm() {
             </button>
           </div>
           <div className="flex items-center justify-center mt-5  bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600">
-            <Link href='/signup'> Create New Account </Link>
+            
+            {/* create new account prompt register redirect */}
+            <Link href='/register'> Create New Account </Link>
           </div>
         </form>
       </div>
