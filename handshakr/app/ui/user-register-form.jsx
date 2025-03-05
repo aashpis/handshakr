@@ -1,30 +1,31 @@
 'use client'
 
-import { signUp } from '../lib/auth'
+import { registerUser } from '../lib/auth'
 import { useActionState } from 'react'
 
-export default function SignupForm() {
-  const [state, action, pending] = useActionState(signUp, undefined)
+export default function UserRegisterForm() {
+  const [state, action, pending] = useActionState(registerUser, undefined)
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-100">
       <form
         action={action}
-        className="bg-white px-8 pt-6 pb-8 mb-4">
+        className="bg-white px-8 pt-6 pb-8 mb-4"
+        >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="name">
-            Name
+            htmlFor="username">
+            Username
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name" 
-            name="name"
-            placeholder="Name" 
+            id="username" 
+            name="username"
+            placeholder="Username" 
             />
         </div>
-        {state?.errors?.name && <p className='text-red-500 mb-4'>{state.errors.name}</p>}
+        {state?.errors?.username && <p className='text-red-500 mb-4'>{state.errors.name}</p>}
 
         <div className="mb-4">
           <label
