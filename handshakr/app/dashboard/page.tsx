@@ -1,7 +1,11 @@
+'use client'
+
 import { verifySession } from './app/lib/dal'
 import  ProfileCard  from '../ui/profile-card'
 import HandshakeCreationForm from '../ui/handshake-creation-form'
 import { getUserProfile } from '@/lib/dal'
+import { useState } from "react";
+import  InitiateHandshake from '../ui/initiate-handshake'
 
 const user = {
   username: "jSmith",
@@ -12,13 +16,17 @@ const user = {
 const userProfile = getUserProfile() 
 
 export default function Page() {
+
+
     return (
-      <div>
-    <ProfileCard 
-    username = {user.username}
-    userId = {user.userID}
-    email = {user.email}
-    />
+    <div className='m-auto'>
+      <ProfileCard 
+      username = {user.username}
+      userId = {user.userID}
+      email = {user.email}
+      />
+
+      <InitiateHandshake />
 
     </div>
     );
