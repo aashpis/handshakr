@@ -20,7 +20,7 @@ import clsx from 'clsx';
 // ];
 const links = [
   { name: 'Home', href: '/dashboard'},
-  { name: 'My Handshakes', href: '/handshakes'},
+  { name: 'Handshakes', href: '/handshakes'},
   { name: 'History', href: '/history'}
 ];
 
