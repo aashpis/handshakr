@@ -1,10 +1,10 @@
-import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS } from './definitions'
+import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS, LoginFormSchema } from './definitions'
 import { createSession, deleteSession } from './session'
 import { redirect } from 'next/navigation'
 
 
 // check if email is available to use for signup
-async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
+export async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
   try {
     const response = await fetch(`${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`, {
       method: 'GET',
@@ -34,7 +34,7 @@ async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>
 }
 
 // adds new user data to backend 
-async function createUser(data: {
+export async function createUser(data: {
   username: string,
   password: string,
   email: string
@@ -70,7 +70,7 @@ async function createUser(data: {
 }
 
 // auth user data for login
-async function authUser(data: {
+export async function authUser(data: {
   username: string,
   password: string
 }): Promise<ApiResult<UserAuthResponse>> { // type def. in definitions.tsx
@@ -183,19 +183,60 @@ export async function login(state: FormState, formData: FormData) {
 
   const { username, password } = validatedFields.data
 
-  // 3. Register new user, get new user data from backend
-  const result = await authUser({
-    username,
-    password
-  })
+  // // 3. Register new user, get new user data from backend
+  // const result = await authUser({
+  //   username,
+  //   password
+  // })
 
-  if (!result.success) {
-    return {
-      message: result.error
-    }
-  }
+  // if (!result.success) {
+  //   return {
+  //     message: result.error
+  //   }
+  // }
   // TESTING ONLY:
   console.log("User sucessfully created")
+  console.log(username)
+  console.log(password)
+
+  // // 5. Create session. Get user id to create a session
+  // await createSession(result.data.user.id)
+
+  // 6. Redirect to dashboard
+  redirect('/dashboard')
+}
+
+// test login function to test flow while server API is in Dev
+export  function loginTest(prevState: FormState, formData: FormData) {
+  //Validate form fields
+  const validatedFields = LoginFormSchema.safeParse({
+    username: formData.get('username'),
+    password: formData.get('password'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors
+    }
+  }
+
+  const { username, password } = validatedFields.data
+
+  // // 3. Register new user, get new user data from backend
+  // const result = await authUser({
+  //   username,
+  //   password
+  // })
+
+  // if (!result.success) {
+  //   return {
+  //     message: result.error
+  //   }
+  // }
+  // TESTING ONLY:
+  console.log("User sucessfully created")
+  console.log(username)
+  console.log(password)
 
   // // 5. Create session. Get user id to create a session
   // await createSession(result.data.user.id)
@@ -208,7 +249,6 @@ export async function login(state: FormState, formData: FormData) {
 
 
   
-}
 
 // Signout function
 // TODO: does anything need to be sent to the backend or is deleting the session enough?
