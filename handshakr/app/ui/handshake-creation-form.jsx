@@ -13,13 +13,13 @@ export default function HandshakeCreationForm() {
       <div className="mb-4">
         <label 
         className="block text-gray-700 text-sm font-bold mb-2"
-        htmlFor="name">
-          Handshake Name
+        htmlFor="title">
+          Handshake title
         </label>
         <input 
         
-        id="name" 
-        name="name" 
+        id="title" 
+        name="title" 
         placeholder="My Handshake..." />
       </div>
       {state?.errors?.name && <p>{state.errors.name}</p>}
