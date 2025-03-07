@@ -13,7 +13,7 @@ const user = {
   email: "jsmith@gmail.com"
 }
 
-const userProfile = getUserProfile() 
+// const userProfile = getUserProfile() 
 
 export default function Page() {
 
