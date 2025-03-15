@@ -12,9 +12,18 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "var(--primary)",
+        "primary-dark": "var(--primary-dark)",
+        "primary-light": "var(--primary-light)",
+        "neutral" : "var(--neutral)",
+        "neutral-dark" : "var(--neutral-dark)",
+        "neutral-light" : "var(--neutral-light)",
         secondary: "var(--secondary)",
         accent: "var(--accent)",
         muted: "var(--muted)"
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)'],
+        serif: ['var(--font-serif)'],
       },
     },
   },

@@ -1,13 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #3498db;
-  --secondary: #2ecc71;
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Lusitana', Georgia, 'Times New Roman', serif;
+  --background: #f2f6f8;
+  --foreground: #0B1215;
+  --primary: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-light:#e0f2fe;
   --accent: #9b59b6;
+  --neutral: #f1f5f9;
+  --neutral-dark: #374151;
+  --neutral-light: #f3f4f6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,5 +30,9 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: var(--font-sans)
 }
+
+
+  
