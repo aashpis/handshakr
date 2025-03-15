@@ -8,7 +8,7 @@ export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
-        className="mb-2 flex h-20 items-center p-4 md:h-40 bg-blue-500"
+        className="mb-2 flex h-20 items-center p-4 md:h-40 bg-primary"
         href="/"
       >
         <Image
