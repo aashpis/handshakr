@@ -1,10 +1,10 @@
 'use client'
 
-import { registerUser } from '../lib/auth'
+import { registerNewUser } from '../lib/auth'
 import { useActionState } from 'react'
 
 export default function UserRegisterForm() {
-  const [state, action, pending] = useActionState(registerUser, undefined)
+  const [state, action, pending] = useActionState(registerNewUser, undefined)
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-100">
