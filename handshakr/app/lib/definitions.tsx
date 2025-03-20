@@ -8,7 +8,7 @@ import { z } from 'zod'
 
 // API endpoints
 export const API = {
-  BASE: 'http://localhost:8080/',
+  BASE: 'http://localhost:8080',
   REGISTER: '/handshakr/auth/register',
   LOGIN: '/handshakr/auth/login', 
   SIGNOUT: '/handshakr/auth/signout',
