@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import API from 'lib/definitions'
 
 // Define protected routes
 const protectedRoutes = ["/dashboard", "/handshakes", "/history"];
 
 // API Base URL (Placeholder)
-const API_BASE_URL = "https://api.example.com";
 
 // Middleware function
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const cookieStore = await cookies(); // Await the cookies() call
-  const jwt = cookieStore.get("access_cstoken")?.value; // Read JWT from httpOnly cookie
+  const jwt = cookieStore.get("jwt_token")?.value; // Read JWT from httpOnly cookie
 
   // Check if the request is for a protected route
   if (protectedRoutes.some((route) => url.pathname.startsWith(route))) {
@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
     try {
       // Fetch CSRF token from backend
       //TODO: store it locally instead?
-      const csrfRes = await fetch(`${API_BASE_URL}/csrf-token`, {
+      const csrfRes = await fetch(API.BASE/API.csrf-token, {
         method: "GET",
         credentials: "include",
         headers: {
