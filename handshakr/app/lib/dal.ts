@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 import { decrypt } from './session'
 import { cache} from 'react'
 import { redirect } from 'next/navigation'
-import {API_ENDPOINTS, ApiResult} from './definitions'
+import {API, ApiResult} from './definitions'
 
 // if verified: stores isAuth and userId in cache
 // else: redirect to home page
@@ -29,7 +29,7 @@ export const verifySession = cache(async () => {
   // check if email is available to use for signup
 export async function getUserProfile(): Promise<ApiResult<boolean>> {
     try {
-      const response = await fetch(API_ENDPOINTS.userProfile, {
+      const response = await fetch(API.USER_PROFILE, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

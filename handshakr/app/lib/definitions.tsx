@@ -7,14 +7,23 @@
 import { z } from 'zod'
 
 // API endpoints
-export const API_ENDPOINTS = {
-  register: 'http://localhost:8080/handshakr/auth/register',
-  login: 'http://localhost:8080/handshakr/auth/login', //TODO: change sign in to login
-  signout: '/handshakr/auth/signout',
-  checkEmail: '/handshakr/auth/check-email-for-account',
-  userProfile: '/handshakr/auth/user-profile',
-  createHandshake: '/handshakr/auth/create-handshake',
-  refreshToken: '/handshakr/auth/refresh-token',
+export const API = {
+  BASE: 'http://localhost:8080/',
+  REGISTER: '/handshakr/auth/register',
+  LOGIN: '/handshakr/auth/login', 
+  SIGNOUT: '/handshakr/auth/signout',
+  CHECK_EMAIL: '/handshakr/auth/check-email-for-account',
+  USER_PROFILE: '/handshakr/auth/user-profile',
+  HANDSHAKE: {
+    CREATE: '/handshakr/auth/create-handshake',
+    DELETE: '/handshakr/auth/delte-handshake',
+    ACTIVE: '/handshakr/auth/active-handshake',
+    HISTORY: '/handshakr/auth/history-handshake',
+    PENDING: '/handshakr/auth/pending-handshake',
+  },
+  REFRESH_TOKEN: '/handshakr/auth/refresh-token',
+  JWT_TOKEN: '/handshakr/auth/jwt-token',
+  CSRF_TOKEN: '/handshakr/auth/csrf_token',
 }
 
 /**********  SCHEMA DEFINTIONS  *******************
