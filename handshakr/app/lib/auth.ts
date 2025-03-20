@@ -1,11 +1,11 @@
-import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS, LoginFormSchema } from './definitions'
+import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API, LoginFormSchema } from './definitions'
 import { createSession, deleteSession } from './session'
 import { redirect } from 'next/navigation'
 
 
 export async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
   try {
-    const response = await fetch(`${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`, { //may need to update URI comp part
+    const response = await fetch(`${API.CHECK_EMAIL}?email=${encodeURIComponent(email)}`, { //may need to update URI comp part
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export async function createUser(data: {
   email: string
 }): Promise<ApiResult<UserAuthResponse>> {
   try {
-    const response = await fetch(API_ENDPOINTS.register, {
+    const response = await fetch(API.REGISTER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: "include", //TODO: do we have crednetials yet? 
@@ -56,7 +56,7 @@ export async function authLoginData(data: {
   password: string
 }): Promise<ApiResult<UserAuthResponse>> {
   try {
-    const response = await fetch(API_ENDPOINTS.login, {
+    const response = await fetch(API.LOGIN, {
       method: 'POST', // ✅ Fix: Should be POST
       headers: { 'Content-Type': 'application/json' },
       credentials: "include", // stores JWT and CSRF cookies
@@ -140,7 +140,7 @@ export async function login(state: FormState, formData: FormData) {
 // redirect to login
 export async function signout() {
   try {
-    await fetch(API_ENDPOINTS.signout, {
+    await fetch(API.SIGNOUT, {
       method: 'POST',
       credentials: "include" 
     });
