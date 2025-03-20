@@ -1,88 +1,51 @@
-import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API_ENDPOINTS, LoginFormSchema } from './definitions'
-import { createSession, deleteSession } from './session'
+import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API, LoginFormSchema } from './definitions'
+import { deleteSession } from './session'
 import { redirect } from 'next/navigation'
+import axiosInstance from "./axiosInstance";
 
 
-export async function checkEmailAvailability(email: string): Promise<ApiResult<boolean>> {
+export async function checkEmailAvailability(email: string) {
   try {
-    const response = await fetch(`${API_ENDPOINTS.checkEmail}?email=${encodeURIComponent(email)}`, { //may need to update URI comp part
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: "include" //May not have credentials yet
+    const response = await axiosInstance.get(API.CHECK_EMAIL, {
+      params: { email },
     });
-
-    if (!response.ok) {
-      return { success: false, error: 'Failed to check email availability' };
-    }
-
-    const { available } = await response.json();
-    return { success: true, data: available };
+    return { success: true, data: response.data.available }; //TODO: Match available to backend response
   } catch (error) {
-    return { success: false, error: 'Failed to check email availability' };
+    return { success: false, error: "Failed to check email availability" };
   }
 }
 
-export async function createUser(data: {
+// post new user data to server
+export async function createUser(
   username: string,
   password: string,
   email: string
-}): Promise<ApiResult<UserAuthResponse>> {
+){
   try {
-    const response = await fetch(API_ENDPOINTS.register, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: "include", //TODO: do we have crednetials yet? 
-      body: JSON.stringify(data)
+    
+    const response = await axiosInstance.post(API.REGISTER, {
+      params: { username, password, email },
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message || 'Failed to create account' };
-    }
-
-    const authResponse = await response.json();
-    return { success: true, data: authResponse };
+    return { success: true, data: response.data };
   } catch (error) {
-    return { success: false, error: 'An unexpected error occurred' };
+    return { success: false, error: "Account creation failed" };
   }
 }
 
 
-// auth user data for login
-export async function authLoginData(data: {
-  username: string,
-  password: string
-}): Promise<ApiResult<UserAuthResponse>> {
+// auth user login. 
+export async function authLoginData(data: { username: string; password: string }) {
   try {
-    const response = await fetch(API_ENDPOINTS.login, {
-      method: 'POST', // ✅ Fix: Should be POST
-      headers: { 'Content-Type': 'application/json' },
-      credentials: "include", // stores JWT and CSRF cookies
-      body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message || 'Failed to login' };
-    }
-
-    const authResponse = await response.json();
-    return { success: true, data: authResponse };
-  } catch (error) {
-    return { success: false, error: 'An unexpected error occurred' };
+    const response = await axiosInstance.post(API.LOGIN, data);
+    return { success: true, data: response.data };
+  } catch (error: any) {
+    return { success: false, error: error.response?.data?.message || "Failed to login" }; 
   }
 }
-
-// Main Sign Up function
-// Validates User Data
-// Checks if Email is available
-// Hashes password before storing
-// POST data to back end
-// Create Session
+// new user sign up flow 
+// validates new user input and posts to the server
 // redirect to user dashboard
-export async function registerUser(state: FormState, formData: FormData) {
+export async function registerNewUser(state: FormState, formData: FormData) {
   const validatedFields = UserRegisterFormSchema.safeParse({
     username: formData.get('username'),
     email: formData.get('email'),
@@ -95,7 +58,7 @@ export async function registerUser(state: FormState, formData: FormData) {
 
   const { username, email, password } = validatedFields.data;
 
-  const result = await createUser({ username, email, password });
+  const result = await createUser( username, email, password );
 
   if (!result.success) {
     return { message: result.error };
@@ -134,22 +97,13 @@ export async function login(state: FormState, formData: FormData) {
 
   
 
-// Signout function
-// calls backend to clear Tokens
-// deletes local cookies storing tokens
-// redirect to login
+// Signout and redirect to login
 export async function signout() {
   try {
-    await fetch(API_ENDPOINTS.signout, {
-      method: 'POST',
-      credentials: "include" 
-    });
-
-    await deleteSession();
-    redirect('/login');
+    await axiosInstance.post(API.SIGNOUT);
+    redirect("/login");
   } catch (error) {
-    console.error('Signout error:', error);
-    await deleteSession();
-    redirect('/');
+    console.error("Signout error:", error);
+    redirect("/");
   }
 }
