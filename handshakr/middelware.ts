@@ -1,39 +1,70 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { decrypt } from './app/lib/session'
-import { cookies } from 'next/headers'
- 
-// 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard']
-const publicRoutes = ['/login', '/signup', '/']
- 
-export default async function middleware(req: NextRequest) {
-  // 2. Check if the current route is protected or public
-  const path = req.nextUrl.pathname
-  const isProtectedRoute = protectedRoutes.includes(path)
-  const isPublicRoute = publicRoutes.includes(path)
- 
-  // 3. Decrypt the session from the cookie
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
- 
-  // 4. Redirect to /login if the user is not authenticated
-  if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { API } from './app/lib/definitions'
+
+
+//TODO: make sure all placeholders match backend shape
+
+// public routes, no auth needed 
+const publicRoutes = ['/login', '/register', '/']
+// routes that require auth
+const protectedRoutes = ["/dashboard", "/handshakes", "/history"];
+
+
+// Middleware function
+export async function middleware(req: NextRequest) {
+  const url = req.nextUrl;
+  const cookieStore = await cookies(); // Await the cookies() call
+  const jwt = cookieStore.get("jwt_token")?.value; // Read JWT from httpOnly cookie
+
+  // Check if the request is for a protected route
+  if (protectedRoutes.some((route) => url.pathname.startsWith(route))) {
+    if (!jwt) {
+      // Redirect to login if user is not authenticated
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    try {
+      // Fetch CSRF token from backend
+      //QUESTION: store it locally instead
+      //TODO: Match backend shape
+      const csrfRes = await fetch(`${API.BASE}${API.CSRF_TOKEN}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Cookie: `access_token=${jwt}`, // Send JWT in cookies
+        },
+      });
+
+      if (!csrfRes.ok) {
+        throw new Error("Failed to fetch CSRF token"); 
+      }
+
+      //store CSRF
+      //TODO: match backend shape
+      const { csrfToken } = await csrfRes.json();
+
+      // Attach JWT and CSRF to request headers
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set("Authorization", `Bearer ${jwt}`);
+      requestHeaders.set("X-CSRF-Token", csrfToken);
+
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    //if auth error, redirect to login  
+    } catch (error) {
+      console.error("Middleware auth error:", error); 
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
   }
- 
-  // 5. Redirect to /dashboard if the user is authenticated
-  if (
-    isPublicRoute &&
-    session?.userId &&
-    !req.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-  }
- 
-  return NextResponse.next()
+
+  return NextResponse.next();
 }
- 
-// Routes Middleware should not run on
+
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }
