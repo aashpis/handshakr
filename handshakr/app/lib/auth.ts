@@ -1,5 +1,4 @@
 import { UserRegisterFormSchema, FormState, UserAuthResponse, ApiResult, API, LoginFormSchema } from './definitions'
-import { deleteSession } from './session'
 import { redirect } from 'next/navigation'
 import axiosInstance from "./axiosInstance";
 
@@ -93,7 +92,6 @@ export async function login(state: FormState, formData: FormData) {
 
   redirect('/dashboard');
 }
-
 
   
 
