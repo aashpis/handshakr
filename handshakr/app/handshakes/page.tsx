@@ -6,7 +6,7 @@ import HandshakeCard from "../ui/handshake-card"
 const handshake = {
     id: "12345",
     initiator: "Shankar",
-    agreer: "Ari",
+    agreererer: "Ari",
     compensation: "$20",
     terms: "I will sell you a used computer mouse for $20",
     status: "",

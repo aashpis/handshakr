@@ -7,7 +7,7 @@ const handshakes = [
     {
         id: "12345",
         initiator: "Shankar",
-        agreer: "Ari",
+        agreererer: "Ari",
         compensation: "$20",
         terms: "I will sell you a used computer mouse for $20",
         status: "completed",
@@ -16,7 +16,7 @@ const handshakes = [
     {
         id: "12346",
         initiator: "Lenny",
-        agreer: "Mike",
+        agreererer: "Mike",
         compensation: "Lunch",
         terms: "I will help you move furniture in exchange for lunch",
         status: "completed",
@@ -25,7 +25,7 @@ const handshakes = [
     {
         id: "12347",
         initiator: "Jordan",
-        agreer: "Casey",
+        agreerer: "Casey",
         compensation: "$50",
         terms: "I will design a logo for your startup for $50",
         status: "completed",
@@ -34,7 +34,7 @@ const handshakes = [
     {
         id: "12348",
         initiator: "Ari",
-        agreer: "Mekky",
+        agreerer: "Mekky",
         compensation: "Takis",
         terms: "I will give you a bag Takis for a pizza",
         status: "failed",
@@ -43,7 +43,7 @@ const handshakes = [
     {
         id: "12349",
         initiator: "Sam",
-        agreer: "Morgan",
+        agreerer: "Morgan",
         compensation: "$100",
         terms: "I will develop a simple website for you for $100",
         status: "completed",
