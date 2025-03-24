@@ -7,16 +7,20 @@
 import { z } from 'zod'
 
 // API endpoints
+//TODO: replace placerholders
 export const API = {
   BASE: 'http://localhost:8080',
   REGISTER: '/handshakr/auth/register',
   LOGIN: '/handshakr/auth/login', 
   SIGNOUT: '/handshakr/auth/signout',
-  CHECK_EMAIL: '/handshakr/auth/check-email-for-account',
-  USER_PROFILE: '/handshakr/auth/user-profile',
+  CHECK_EMAIL: '/handshakr/auth/check-email-for-account/',
+  USER_PROFILE: '/handshakr/auth/user-profile/',
   HANDSHAKE: {
     CREATE: '/handshakr/auth/create-handshake',
-    DELETE: '/handshakr/auth/delte-handshake',
+    DELETE: '/handshakr/auth/delete-handshake',
+    ACCEPT: '/handshakr/auth/accept-handshake',
+    REJECT: '/handshakr/auth/reject-handshake',
+    CONNECT_agreererER: '/handshakr/auth/connect-user',
     ACTIVE: '/handshakr/auth/active-handshake',
     HISTORY: '/handshakr/auth/history-handshake',
     PENDING: '/handshakr/auth/pending-handshake',
@@ -71,7 +75,7 @@ export const HandshakeFormSchema = z.object({
     .string()
     .min(10, { message: 'Description must be at least 10 characters long.' })
     .trim(),
-  agreerEmail: z
+  agreererEmail: z
     .string()
     .email({ message: 'Please enter a valid email.' })
     .trim(),
@@ -93,47 +97,5 @@ export type FormState =
       message?: string
     }
   | undefined
-  
-// SessionPayload for JWT
-// TODO: define contents of payload 
-export type SessionPayload = {
-  userId: string
-  token: string
-  expiresAt: string
-  [key: string]: any // For any additional claims
-}
 
-//payload for login auth
-export type LoginPayload = {
-  username: string
-  password: string
-}
-
-//payload for register auth
-export type RegisterPayload ={
-  username: string
-  password: string
-  email: string
-}
-
-// stores results from API calls. 
-export type ApiResult<T> = {
-  success: true
-  data: T
-} | {
-  success: false
-  error: string
-}
-
-// Contains User Authentication Response data
-// TODO: define data is returned from backend auth endpoints
-export type UserAuthResponse = {
-  token: string // JWT 
-  user: {
-    id: string
-    name: string
-    email: string
-    role?: string
-  }
-}
 
