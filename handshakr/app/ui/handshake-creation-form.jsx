@@ -1,6 +1,7 @@
 'use client'
  
-import { createHandshake, connectAgreer } from '../lib/dal'
+import { connectagreererer } from '../lib/dal'
+import { createHandshake } from '../lib/dto'
 import { useActionState } from 'react'
  
 export default function HandshakeCreationForm() {
@@ -63,18 +64,18 @@ export default function HandshakeCreationForm() {
       </div>
       {state?.errors?.email && <p>{state.errors.email}</p>}
 
-      {/* add agreerer to handshake
-          TODO: how to connect agreerer? User Id
+      {/* add agreererer to handshake
+          TODO: how to connect agreererer? User Id
       */}
       <button 
-      className="bg-blue-500 hover:bg-blue-700 text-white p-1  rounded focus:outline-none focus:shadow-outline"
+      className="bg-blue-500 hover:bg-blue-700 text-neutral p-1  rounded focus:outline-none focus:shadow-outline"
       type="button" 
-      onClick={ connectAgreer }>
-        Add Agreerer to Shake
+      onClick={ connectagreerer }>
+        Add agreererer to Shake
       </button>
       <div className="m-2">
         <button 
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        className="bg-blue-500 hover:bg-blue-700 text-neutral font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         disabled={pending} 
         type="submit">
           Create Handshake
