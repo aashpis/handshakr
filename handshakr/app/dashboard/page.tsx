@@ -1,11 +1,9 @@
 'use client'
 
-import { verifySession } from './app/lib/dal'
 import  ProfileCard  from '../ui/profile-card'
-import HandshakeCreationForm from '../ui/handshake-creation-form'
 import { getUserProfile } from '@/lib/dal'
-import { useState } from "react";
 import  InitiateHandshake from '../ui/initiate-handshake'
+import HandshakeAnalyticsCard from '../ui/handshake-analytics-card'
 
 const user = {
   username: "jSmith",
@@ -19,16 +17,33 @@ export default function Page() {
 
 
     return (
-    <div className='m-auto'>
-      <ProfileCard 
-      username = {user.username}
-      userId = {user.userID}
-      email = {user.email}
-      />
+    <div>
+      <div className='flex row justify-evenly m-auto'>
+        <ProfileCard 
+        username = {user.username}
+        userId = {user.userID}
+        email = {user.email}
+        />
+        <HandshakeAnalyticsCard 
+          count = '10'
+          type = 'pending'
+        />
+        <HandshakeAnalyticsCard 
+          count = '10'
+          type = 'pending'
+        />
+        <HandshakeAnalyticsCard 
+          count = '10'
+          type = 'pending'
+        />
 
-      <InitiateHandshake />
+      </div>
 
-    </div>
+      <div>
+        <InitiateHandshake />
+      </div>
+
+    </div>  
     );
   }
  
